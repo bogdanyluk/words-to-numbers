@@ -62,8 +62,8 @@ wordsToNumbers('there were twenty-thousand, five-hundred and sixty-nine X in the
 ## With Fuzzy Matching
 
 Uses
-[Jaro distance](https://en.wikipedia.org/wiki/Jaro%E2%80%93Winkler_distance) to
-find the best match for the number words. Don't rely on this being completely
+[Jaro–Winkler distance](https://en.wikipedia.org/wiki/Jaro%E2%80%93Winkler_distance)
+to find the best match for the number words. Don't rely on this being completely
 accurate...
 
 ```ts
