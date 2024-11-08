@@ -3,17 +3,25 @@ export interface WordsToNumbersOptions {
   impliedHundreds?: boolean;
 }
 
+export enum TokenType {
+  UNIT = 0,
+  TEN = 1,
+  MAGNITUDE = 2,
+  DECIMAL = 3,
+  HUNDRED = 4,
+}
+
 export interface Token {
   start: number;
   end: number;
   value: string;
   lowerCaseValue: string;
-  type: number | undefined;
+  type: TokenType | undefined;
 }
 
 export interface SubRegion {
   tokens: Token[];
-  type: number | undefined;
+  type: TokenType | undefined;
 }
 
 export interface Region extends SubRegion {

@@ -7,17 +7,17 @@ type FuzzyMatch = {
 };
 
 const fuzzyMatch = (word: string): string => {
-  return ALL_WORDS.map<FuzzyMatch>((numberWord) => ({
+  const allMatches = ALL_WORDS.map<FuzzyMatch>((numberWord) => ({
     word: numberWord,
     score: jaroWinkler(numberWord, word),
-  })).reduce<FuzzyMatch>(
-    (bestMatch, currentMatch) =>
-      currentMatch.score > bestMatch.score ? currentMatch : bestMatch,
-    {
-      word: "",
-      score: 0,
-    }
-  ).word;
+  }));
+
+  const bestMatch = allMatches.reduce<FuzzyMatch>(
+    (best, current) => (current.score > best.score ? current : best),
+    { word: "", score: 0 }
+  );
+
+  return bestMatch.word;
 };
 
 export default fuzzyMatch;

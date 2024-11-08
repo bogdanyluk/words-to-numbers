@@ -11,5 +11,6 @@ export const splice = (
       i = 0;
     }
   }
+
   return str.slice(0, i) + (add || "") + str.slice(i + count);
 };

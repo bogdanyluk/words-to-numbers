@@ -1,5 +1,5 @@
-import { NUMBER, TokenType } from "./constants";
-import type { Region, SubRegion } from "./types";
+import { NUMBER } from "./constants";
+import { TokenType, type Region, type SubRegion } from "./types";
 import { splice } from "./util";
 
 const getNumber = (region: Region): number => {
@@ -9,14 +9,17 @@ const getNumber = (region: Region): number => {
   region.subRegions.forEach((subRegion) => {
     const { tokens, type } = subRegion;
     let subRegionSum = 0;
+
     if (type === TokenType.DECIMAL) {
       decimalReached = true;
       return;
     }
+
     if (decimalReached) {
       decimalUnits.push(subRegion);
       return;
     }
+
     switch (type) {
       case TokenType.MAGNITUDE:
       case TokenType.HUNDRED: {
@@ -33,8 +36,8 @@ const getNumber = (region: Region): number => {
                 const previousTokenToAddType = tokensToAdd[j - 1].type;
                 const tokenToAddType = tokenToAdd.type;
                 return (
-                  typeof previousTokenToAddType !== "undefined" &&
-                  typeof tokenToAddType !== "undefined" &&
+                  typeof previousTokenToAddType == "number" &&
+                  typeof tokenToAddType === "number" &&
                   previousTokenToAddType > tokenToAddType
                 );
               });
@@ -66,6 +69,7 @@ const getNumber = (region: Region): number => {
           });
         break;
       }
+
       case TokenType.UNIT:
       case TokenType.TEN: {
         tokens.forEach((token) => {
@@ -73,6 +77,7 @@ const getNumber = (region: Region): number => {
         });
         break;
       }
+
       default:
         break;
     }
@@ -90,7 +95,7 @@ const getNumber = (region: Region): number => {
   return sum;
 };
 
-const replaceRegionsInText = (regions: Region[], text: string) => {
+const replaceRegionsInText = (regions: Region[], text: string): string => {
   let replaced = text;
   let offset = 0;
   regions.forEach((region) => {
@@ -111,6 +116,7 @@ const compiler = ({ regions, text }: CompilerParams): string | number => {
   if (regions[0].end - regions[0].start === text.length - 1) {
     return getNumber(regions[0]);
   }
+
   return replaceRegionsInText(regions, text);
 };
 

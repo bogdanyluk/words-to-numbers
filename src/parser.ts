@@ -7,10 +7,10 @@ import {
   NUMBER_WORDS,
   PUNCTUATION,
   TEN_KEYS,
-  TokenType,
   UNIT_KEYS,
 } from "./constants";
 import fuzzyMatch from "./fuzzy-match";
+import { TokenType } from "./types";
 import type { Region, SubRegion, Token, WordsToNumbersOptions } from "./types";
 
 enum Action {
@@ -31,18 +31,21 @@ const canAddTokenToEndOfSubRegion = (
   if (!prevToken) {
     return true;
   }
+
   if (
     prevToken.type === TokenType.MAGNITUDE &&
     currentToken.type === TokenType.UNIT
   ) {
     return true;
   }
+
   if (
     prevToken.type === TokenType.MAGNITUDE &&
     currentToken.type === TokenType.TEN
   ) {
     return true;
   }
+
   if (
     impliedHundreds &&
     subRegion.type === TokenType.MAGNITUDE &&
@@ -51,6 +54,7 @@ const canAddTokenToEndOfSubRegion = (
   ) {
     return true;
   }
+
   if (
     impliedHundreds &&
     subRegion.type === TokenType.MAGNITUDE &&
@@ -59,12 +63,14 @@ const canAddTokenToEndOfSubRegion = (
   ) {
     return true;
   }
+
   if (
     prevToken.type === TokenType.TEN &&
     currentToken.type === TokenType.UNIT
   ) {
     return true;
   }
+
   if (
     !impliedHundreds &&
     prevToken.type === TokenType.TEN &&
@@ -72,12 +78,14 @@ const canAddTokenToEndOfSubRegion = (
   ) {
     return true;
   }
+
   if (
     prevToken.type === TokenType.MAGNITUDE &&
     currentToken.type === TokenType.MAGNITUDE
   ) {
     return true;
   }
+
   if (
     !impliedHundreds &&
     prevToken.type === TokenType.TEN &&
@@ -85,6 +93,7 @@ const canAddTokenToEndOfSubRegion = (
   ) {
     return false;
   }
+
   if (
     impliedHundreds &&
     prevToken.type === TokenType.TEN &&
@@ -92,6 +101,7 @@ const canAddTokenToEndOfSubRegion = (
   ) {
     return true;
   }
+
   return false;
 };
 
@@ -99,6 +109,7 @@ const getSubRegionType = (subRegion: SubRegion | null, currentToken: Token) => {
   if (!subRegion) {
     return { type: currentToken.type, isHundred: false };
   }
+
   const prevToken = subRegion.tokens[0];
   const isHundred =
     (prevToken.type === TokenType.TEN &&
@@ -112,12 +123,15 @@ const getSubRegionType = (subRegion: SubRegion | null, currentToken: Token) => {
     (prevToken.type === TokenType.TEN &&
       currentToken.type === TokenType.UNIT &&
       subRegion.type === TokenType.MAGNITUDE);
+
   if (subRegion.type === TokenType.MAGNITUDE) {
     return { type: TokenType.MAGNITUDE, isHundred };
   }
+
   if (isHundred) {
     return { type: TokenType.HUNDRED, isHundred };
   }
+
   return { type: currentToken.type, isHundred };
 };
 
@@ -127,12 +141,15 @@ const checkIfTokenFitsSubRegion = (
   options: WordsToNumbersOptions
 ) => {
   const { type, isHundred } = getSubRegionType(subRegion, token);
+
   if (!subRegion) {
     return { action: Action.START_NEW_REGION, type, isHundred };
   }
+
   if (canAddTokenToEndOfSubRegion(subRegion, token, options)) {
     return { action: Action.ADD, type, isHundred };
   }
+
   return { action: Action.START_NEW_REGION, type, isHundred };
 };
 
@@ -140,6 +157,7 @@ const getSubRegions = (region: Region, options: WordsToNumbersOptions) => {
   const subRegions: SubRegion[] = [];
   let currentSubRegion: SubRegion | null = null;
   const tokensCount = region.tokens.length;
+
   let i = tokensCount - 1;
   while (i >= 0) {
     const token = region.tokens[i];
@@ -148,6 +166,7 @@ const getSubRegions = (region: Region, options: WordsToNumbersOptions) => {
       token,
       options
     );
+
     token.type = isHundred ? TokenType.HUNDRED : token.type;
     switch (action) {
       case Action.ADD: {
@@ -157,6 +176,7 @@ const getSubRegions = (region: Region, options: WordsToNumbersOptions) => {
         }
         break;
       }
+
       case Action.START_NEW_REGION: {
         currentSubRegion = {
           tokens: [token],
@@ -165,6 +185,7 @@ const getSubRegions = (region: Region, options: WordsToNumbersOptions) => {
         subRegions.unshift(currentSubRegion);
         break;
       }
+
       default:
         break;
     }
@@ -188,6 +209,7 @@ const canAddTokenToEndOfRegion = (
   ) {
     return false;
   }
+
   if (
     !impliedHundreds &&
     prevToken.type === TokenType.UNIT &&
@@ -195,6 +217,7 @@ const canAddTokenToEndOfRegion = (
   ) {
     return false;
   }
+
   if (
     !impliedHundreds &&
     prevToken.type === TokenType.TEN &&
@@ -202,6 +225,7 @@ const canAddTokenToEndOfRegion = (
   ) {
     return false;
   }
+
   return true;
 };
 
@@ -214,27 +238,34 @@ const checkIfTokenFitsRegion = (
   if ((!region || !region.tokens.length) && isDecimal) {
     return Action.START_NEW_REGION;
   }
+
   const isPunctuation = PUNCTUATION.includes(token.lowerCaseValue);
   if (isPunctuation) {
     return Action.SKIP;
   }
+
   const isJoiner = JOINERS.includes(token.lowerCaseValue);
   if (isJoiner) {
     return Action.SKIP;
   }
+
   if (isDecimal && !region?.hasDecimal) {
     return Action.ADD;
   }
+
   const isNumberWord = NUMBER_WORDS.includes(token.lowerCaseValue);
   if (isNumberWord) {
     if (!region) {
       return Action.START_NEW_REGION;
     }
+
     if (canAddTokenToEndOfRegion(region, token, options)) {
       return Action.ADD;
     }
+
     return Action.START_NEW_REGION;
   }
+
   return Action.NOPE;
 };
 
@@ -262,6 +293,7 @@ const matchRegions = (
       case Action.SKIP: {
         break;
       }
+
       case Action.ADD: {
         if (currentRegion) {
           currentRegion.end = token.end;
@@ -272,6 +304,7 @@ const matchRegions = (
         }
         break;
       }
+
       case Action.START_NEW_REGION: {
         currentRegion = {
           start: token.start,
@@ -287,6 +320,7 @@ const matchRegions = (
         }
         break;
       }
+
       case Action.NOPE:
       default: {
         currentRegion = null;
@@ -306,15 +340,19 @@ const getTokenType = (chunk: string): TokenType | undefined => {
   if (UNIT_KEYS.includes(chunk.toLowerCase())) {
     return TokenType.UNIT;
   }
+
   if (TEN_KEYS.includes(chunk.toLowerCase())) {
     return TokenType.TEN;
   }
+
   if (MAGNITUDE_KEYS.includes(chunk.toLowerCase())) {
     return TokenType.MAGNITUDE;
   }
+
   if (DECIMALS.includes(chunk.toLowerCase())) {
     return TokenType.DECIMAL;
   }
+
   return undefined;
 };
 
@@ -339,7 +377,9 @@ const parser = (text: string, options: WordsToNumbersOptions): Region[] => {
       }
       return acc;
     }, []);
+
   const regions = matchRegions(tokens, options);
+
   return regions;
 };
 
