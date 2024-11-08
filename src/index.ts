@@ -4,7 +4,7 @@ import type { WordsToNumbersOptions } from "./types";
 
 export type { WordsToNumbersOptions };
 
-export const wordsToNumbers = (
+const wordsToNumbers = (
   text: string,
   options: WordsToNumbersOptions = {}
 ): string | number => {
