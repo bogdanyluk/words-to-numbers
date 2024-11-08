@@ -1,0 +1,4 @@
+# Core files
+node_modules/
+dist/
+tmp/
