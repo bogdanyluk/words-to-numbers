@@ -364,8 +364,10 @@ const parser = (text: string, options: WordsToNumbersOptions): Region[] => {
         chunk.length && options.fuzzy && !PUNCTUATION.includes(chunk)
           ? fuzzyMatch(chunk)
           : chunk;
+
       const start = acc.length ? acc[acc.length - 1].end + 1 : 0;
       const end = start + chunk.length;
+
       if (end !== start) {
         acc.push({
           start,
@@ -375,6 +377,7 @@ const parser = (text: string, options: WordsToNumbersOptions): Region[] => {
           type: getTokenType(unfuzzyChunk),
         });
       }
+
       return acc;
     }, []);
 
