@@ -1,5 +1,4 @@
 import {
-  BLACKLIST_SINGULAR_WORDS,
   DECIMALS,
   JOINERS,
   MAGNITUDE_KEYS,
@@ -12,6 +11,7 @@ import {
 import fuzzyMatch from "./fuzzy-match";
 import { TokenType } from "./types";
 import type { Region, SubRegion, Token, WordsToNumbersOptions } from "./types";
+import { checkBlacklist } from "./util";
 
 enum Action {
   SKIP,
@@ -269,10 +269,6 @@ const checkIfTokenFitsRegion = (
 
   return Action.NOPE;
 };
-
-const checkBlacklist = (tokens: Token[]): boolean =>
-  tokens.length === 1 &&
-  BLACKLIST_SINGULAR_WORDS.includes(tokens[0].lowerCaseValue);
 
 const matchRegions = (
   tokens: Token[],
