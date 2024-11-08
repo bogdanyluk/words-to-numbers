@@ -302,7 +302,7 @@ const matchRegions = (
   }));
 };
 
-const getTokenType = (chunk: string): number | undefined => {
+const getTokenType = (chunk: string): TokenType | undefined => {
   if (UNIT_KEYS.includes(chunk.toLowerCase())) {
     return TokenType.UNIT;
   }
