@@ -11,7 +11,8 @@ const fuzzyMatch = (word: string): string => {
     word: numberWord,
     score: jaroWinkler(numberWord, word),
   })).reduce<FuzzyMatch>(
-    (bestMatch, stat) => (stat.score > bestMatch.score ? stat : bestMatch),
+    (bestMatch, currentMatch) =>
+      currentMatch.score > bestMatch.score ? currentMatch : bestMatch,
     {
       word: "",
       score: 0,

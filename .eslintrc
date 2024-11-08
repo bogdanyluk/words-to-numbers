@@ -23,7 +23,8 @@
   },
   "plugins": [
     "deprecation",
-    "@typescript-eslint"
+    "@typescript-eslint",
+    "eslint-plugin-tsdoc"
   ],
   "rules": {
     "consistent-return": "error",
@@ -34,6 +35,7 @@
     "deprecation/deprecation": "warn",
     "no-console": "error",
     "no-param-reassign": "error",
+    "tsdoc/syntax": "warn",
     "@typescript-eslint/consistent-type-imports": [
       "warn",
       {
