@@ -189,6 +189,7 @@ const getSubRegions = (region: Region, options: WordsToNumbersOptions) => {
       default:
         break;
     }
+
     i -= 1;
   }
   return subRegions;
@@ -233,7 +234,7 @@ const checkIfTokenFitsRegion = (
   region: Region | null,
   token: Token,
   options: WordsToNumbersOptions
-) => {
+): Action => {
   const isDecimal = DECIMALS.includes(token.lowerCaseValue);
   if ((!region || !region.tokens.length) && isDecimal) {
     return Action.START_NEW_REGION;
@@ -311,13 +312,10 @@ const matchRegions = (
           end: token.end,
           tokens: [token],
           type: undefined,
-          hasDecimal: false,
+          hasDecimal: token.type === TokenType.DECIMAL ? true : false,
           subRegions: [],
         };
         regions.push(currentRegion);
-        if (token.type === TokenType.DECIMAL) {
-          currentRegion.hasDecimal = true;
-        }
         break;
       }
 
