@@ -27,6 +27,7 @@ const canAddTokenToEndOfSubRegion = (
 ) => {
   const { tokens } = subRegion;
   const prevToken = tokens[0];
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (!prevToken) {
     return true;
   }
@@ -277,6 +278,8 @@ const matchRegions = (
           end: token.end,
           tokens: [token],
           type: undefined,
+          hasDecimal: false,
+          subRegions: [],
         };
         regions.push(currentRegion);
         if (token.type === TokenType.DECIMAL) {

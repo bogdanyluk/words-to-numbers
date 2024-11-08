@@ -2,6 +2,8 @@ import compiler from "./compiler";
 import parser from "./parser";
 import type { WordsToNumbersOptions } from "./types";
 
+export type { WordsToNumbersOptions };
+
 export const wordsToNumbers = (
   text: string,
   options: WordsToNumbersOptions = {}

@@ -1,24 +1,24 @@
-export type WordsToNumbersOptions = {
+export interface WordsToNumbersOptions {
   fuzzy?: boolean;
   impliedHundreds?: boolean;
-};
+}
 
-export type Token = {
+export interface Token {
   start: number;
   end: number;
   value: string;
   lowerCaseValue: string;
   type: number | undefined;
-};
+}
 
-export type SubRegion = {
+export interface SubRegion {
   tokens: Token[];
   type: number | undefined;
-};
+}
 
-export type Region = SubRegion & {
+export interface Region extends SubRegion {
   start: number;
   end: number;
-  hasDecimal?: boolean;
-  subRegions?: SubRegion[];
-};
+  hasDecimal: boolean;
+  subRegions: SubRegion[];
+}

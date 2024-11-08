@@ -6,7 +6,7 @@ const getNumber = (region: Region): number => {
   let sum = 0;
   let decimalReached = false;
   const decimalUnits: SubRegion[] = [];
-  region.subRegions?.forEach((subRegion) => {
+  region.subRegions.forEach((subRegion) => {
     const { tokens, type } = subRegion;
     let subRegionSum = 0;
     if (type === TokenType.DECIMAL) {
@@ -95,22 +95,19 @@ const replaceRegionsInText = (regions: Region[], text: string) => {
   let offset = 0;
   regions.forEach((region) => {
     const length = region.end - region.start + 1;
-    const replaceWith = `${getNumber(region)}`;
+    const replaceWith = getNumber(region).toString();
     replaced = splice(replaced, region.start + offset, length, replaceWith);
     offset -= length - replaceWith.length;
   });
   return replaced;
 };
 
-type CompilerParams = {
+interface CompilerParams {
   regions: Region[];
   text: string;
-};
+}
 
 const compiler = ({ regions, text }: CompilerParams): string | number => {
-  if (!regions) {
-    return text;
-  }
   if (regions[0].end - regions[0].start === text.length - 1) {
     return getNumber(regions[0]);
   }
