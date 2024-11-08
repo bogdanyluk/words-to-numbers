@@ -35,6 +35,26 @@ import wtn from "./index";
 // });
 
 /**
+ * Original tests that were already failing
+ */
+
+// it('one thirty thousand', () => {
+//   expect(wtn('one thirty thousand', { impliedHundreds: true })).to.eq(130000);
+// });
+
+// it('nineteen eighty thousand', () => {
+//   expect(wtn('nineteen eighty thousand', { impliedHundreds: true })).to.eq('19 80000');
+// });
+
+// it('one hundred two thousand', () => {
+//   expect(wtn('one hundred two thousand')).to.eq(102000);
+// });
+
+// it('one hundred and two thousand', () => {
+//   expect(wtn('one hundred and two thousand')).to.eq(102000);
+// });
+
+/**
  * Original tests
  */
 
@@ -343,21 +363,3 @@ it("seventeen dot two four dot twelve dot five", () => {
     "17.24 dot 12.5"
   );
 });
-
-// these dont work below fml
-
-// it('one thirty thousand', () => {
-//   expect(wtn('one thirty thousand', { impliedHundreds: true })).to.eq(130000);
-// });
-
-// it('nineteen eighty thousand', () => {
-//   expect(wtn('nineteen eighty thousand', { impliedHundreds: true })).to.eq('19 80000');
-// });
-
-// it('one hundred two thousand', () => {
-//   expect(wtn('one hundred two thousand')).to.eq(102000);
-// });
-
-// it('one hundred and two thousand', () => {
-//   expect(wtn('one hundred and two thousand')).to.eq(102000);
-// });
