@@ -1,4 +1,9 @@
-export const splice = (str, index, count, add) => {
+export const splice = (
+  str: string,
+  index: number,
+  count: number,
+  add: string
+) => {
   let i = index;
   if (i < 0) {
     i = str.length + i;

@@ -1,14 +1,15 @@
-import { NUMBER, TOKEN_TYPE } from "./constants.js";
-import { splice } from "./util.js";
+import { NUMBER, TokenType } from "./constants";
+import type { Region, SubRegion } from "./types";
+import { splice } from "./util";
 
-const getNumber = (region) => {
+const getNumber = (region: Region): number => {
   let sum = 0;
   let decimalReached = false;
-  let decimalUnits = [];
-  region.subRegions.forEach((subRegion) => {
+  const decimalUnits: SubRegion[] = [];
+  region.subRegions?.forEach((subRegion) => {
     const { tokens, type } = subRegion;
     let subRegionSum = 0;
-    if (type === TOKEN_TYPE.DECIMAL) {
+    if (type === TokenType.DECIMAL) {
       decimalReached = true;
       return;
     }
@@ -17,53 +18,63 @@ const getNumber = (region) => {
       return;
     }
     switch (type) {
-      case TOKEN_TYPE.MAGNITUDE:
-      case TOKEN_TYPE.HUNDRED: {
+      case TokenType.MAGNITUDE:
+      case TokenType.HUNDRED: {
         subRegionSum = 1;
         const tokensCount = tokens.length;
         tokens
-          .reduce((acc, token, i) => {
-            if (token.type === TOKEN_TYPE.HUNDRED) {
+          .reduce<number[]>((acc, token, i) => {
+            if (token.type === TokenType.HUNDRED) {
               let tokensToAdd = tokensCount - 1 ? tokens.slice(i + 1) : [];
-              tokensToAdd = tokensToAdd.filter(
-                (tokenToAdd, j) =>
-                  j === 0 || tokensToAdd[j - 1].type > tokenToAdd.type
-              );
-              const tokensToAddSum = tokensToAdd.reduce(
+              tokensToAdd = tokensToAdd.filter((tokenToAdd, j) => {
+                if (j === 0) {
+                  return true;
+                }
+                const previousTokenToAddType = tokensToAdd[j - 1].type;
+                const tokenToAddType = tokenToAdd.type;
+                return (
+                  typeof previousTokenToAddType !== "undefined" &&
+                  typeof tokenToAddType !== "undefined" &&
+                  previousTokenToAddType > tokenToAddType
+                );
+              });
+
+              const tokensToAddSum = tokensToAdd.reduce<number>(
                 (acc2, tokenToAdd) => acc2 + NUMBER[tokenToAdd.lowerCaseValue],
                 0
               );
-              return acc.concat({
-                ...tokens[i + 1],
-                numberValue:
-                  tokensToAddSum + NUMBER[token.lowerCaseValue] * 100,
-              });
+              acc.push(tokensToAddSum + NUMBER[token.lowerCaseValue] * 100);
+              return acc;
             }
-            if (i > 0 && tokens[i - 1].type === TOKEN_TYPE.HUNDRED) return acc;
+
+            if (i > 0 && tokens[i - 1].type === TokenType.HUNDRED) {
+              return acc;
+            }
+
             if (
               i > 1 &&
-              tokens[i - 1].type === TOKEN_TYPE.TEN &&
-              tokens[i - 2].type === TOKEN_TYPE.HUNDRED
-            )
+              tokens[i - 1].type === TokenType.TEN &&
+              tokens[i - 2].type === TokenType.HUNDRED
+            ) {
               return acc;
-            return acc.concat({
-              token,
-              numberValue: NUMBER[token.lowerCaseValue],
-            });
+            }
+            acc.push(NUMBER[token.lowerCaseValue]);
+            return acc;
           }, [])
-          .forEach(({ numberValue }) => {
+          .forEach((numberValue) => {
             subRegionSum *= numberValue;
           });
         break;
       }
-      case TOKEN_TYPE.UNIT:
-      case TOKEN_TYPE.TEN: {
+      case TokenType.UNIT:
+      case TokenType.TEN: {
         tokens.forEach((token) => {
           subRegionSum += NUMBER[token.lowerCaseValue];
         });
         break;
       }
-      // no default
+      default:
+        break;
     }
     sum += subRegionSum;
   });
@@ -71,7 +82,7 @@ const getNumber = (region) => {
   let currentDecimalPlace = 1;
   decimalUnits.forEach(({ tokens }) => {
     tokens.forEach(({ lowerCaseValue }) => {
-      sum += NUMBER[lowerCaseValue] / Math.pow(10, currentDecimalPlace);
+      sum += NUMBER[lowerCaseValue] / 10 ** currentDecimalPlace;
       currentDecimalPlace += 1;
     });
   });
@@ -79,7 +90,7 @@ const getNumber = (region) => {
   return sum;
 };
 
-const replaceRegionsInText = (regions, text) => {
+const replaceRegionsInText = (regions: Region[], text: string) => {
   let replaced = text;
   let offset = 0;
   regions.forEach((region) => {
@@ -91,9 +102,19 @@ const replaceRegionsInText = (regions, text) => {
   return replaced;
 };
 
-export default ({ regions, text }) => {
-  if (!regions) return text;
-  if (regions[0].end - regions[0].start === text.length - 1)
+type CompilerParams = {
+  regions: Region[];
+  text: string;
+};
+
+const compiler = ({ regions, text }: CompilerParams): string | number => {
+  if (!regions) {
+    return text;
+  }
+  if (regions[0].end - regions[0].start === text.length - 1) {
     return getNumber(regions[0]);
+  }
   return replaceRegionsInText(regions, text);
 };
+
+export default compiler;

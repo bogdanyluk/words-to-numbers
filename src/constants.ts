@@ -1,4 +1,4 @@
-export const UNIT = {
+export const UNIT: Record<string, number> = {
   zero: 0,
   first: 1,
   one: 1,
@@ -41,7 +41,7 @@ export const UNIT = {
   a: 1,
 };
 
-export const TEN = {
+export const TEN: Record<string, number> = {
   twenty: 20,
   twentieth: 20,
   thirty: 30,
@@ -60,7 +60,7 @@ export const TEN = {
   ninetieth: 90,
 };
 
-export const MAGNITUDE = {
+export const MAGNITUDE: Record<string, number> = {
   hundred: 100,
   hundredth: 100,
   thousand: 1000,
@@ -76,7 +76,11 @@ export const MAGNITUDE = {
   decillion: 1000000000000000000000000000000000,
 };
 
-export const NUMBER = { ...UNIT, ...TEN, ...MAGNITUDE };
+export const NUMBER: Record<string, number> = {
+  ...UNIT,
+  ...TEN,
+  ...MAGNITUDE,
+};
 
 export const UNIT_KEYS = Object.keys(UNIT);
 export const TEN_KEYS = Object.keys(TEN);
@@ -113,13 +117,13 @@ export const PUNCTUATION = [
   " ",
 ];
 
-export const TOKEN_TYPE = {
-  UNIT: 0,
-  TEN: 1,
-  MAGNITUDE: 2,
-  DECIMAL: 3,
-  HUNDRED: 4,
-};
+export enum TokenType {
+  UNIT = 0,
+  TEN = 1,
+  MAGNITUDE = 2,
+  DECIMAL = 3,
+  HUNDRED = 4,
+}
 
 export const ALL_WORDS = [...NUMBER_WORDS, ...JOINERS, ...DECIMALS];
 

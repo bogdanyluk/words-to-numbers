@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "target": "es2020",
-    "module": "esnext",
-    "lib": ["dom", "esnext"],
+    "target": "ES2020",
+    "module": "ESNext",
+    "lib": ["DOM", "ESNext"],
     "declaration": true,
     "sourceMap": true,
     "esModuleInterop": true,
@@ -11,16 +11,16 @@
     "skipLibCheck": true,
 
     /* Bundler mode */
-    "moduleResolution": "bundler",
+    "moduleResolution": "Bundler",
     "isolatedModules": true,
 
     /* Linting */
-    // "strict": true,
+    "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["src-new"],
+  "include": ["src", "tsup.config.ts"],
   "exclude": ["node_modules"]
 }

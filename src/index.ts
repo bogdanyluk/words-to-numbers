@@ -1,11 +1,16 @@
-import compiler from "./compiler.js";
-import parser from "./parser.js";
+import compiler from "./compiler";
+import parser from "./parser";
+import type { WordsToNumbersOptions } from "./types";
 
-export function wordsToNumbers(text, options = {}) {
+export const wordsToNumbers = (
+  text: string,
+  options: WordsToNumbersOptions = {}
+): string | number => {
   const regions = parser(text, options);
-  if (!regions.length) return text;
-  const compiled = compiler({ text, regions });
-  return compiled;
-}
+  if (!regions.length) {
+    return text;
+  }
+  return compiler({ text, regions });
+};
 
 export default wordsToNumbers;

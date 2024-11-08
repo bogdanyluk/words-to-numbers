@@ -2,8 +2,8 @@ import { defineConfig } from "tsup";
 
 export default defineConfig({
   entry: ["src/index.ts"],
-  format: ["cjs", "esm"],
-  target: "es2020",
+  format: ["esm", "cjs"],
+  target: "ES2020",
   dts: true,
   treeshake: true,
 });
