@@ -13,6 +13,7 @@
     /* Bundler mode */
     "moduleResolution": "Bundler",
     "isolatedModules": true,
+    "noEmit": true,
 
     /* Linting */
     "strict": true,

@@ -29,8 +29,11 @@
   "scripts": {
     "build": "tsup",
     "format": "prettier --write .",
+    "lint": "npm run lint:src && npm run lint:types && npm run lint:exports",
     "lint:exports": "attw --pack .",
     "lint:src": "eslint .",
+    "lint:types": "tsc",
+    "prepublishOnly": "npm run build && npm run lint",
     "test": "vitest ./src"
   },
   "dependencies": {
