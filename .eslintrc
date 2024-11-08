@@ -32,8 +32,7 @@
     ],
     "deprecation/deprecation": "warn",
     "no-console": "error",
-    "prefer-rest-params": "off",
-    "@typescript-eslint/ban-ts-comment": "warn",
+    "no-param-reassign": "error",
     "@typescript-eslint/consistent-type-imports": [
       "warn",
       {
