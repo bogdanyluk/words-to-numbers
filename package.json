@@ -27,13 +27,15 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "tsup --clean",
+    "dev": "tsup --watch",
     "format": "prettier --write .",
     "lint": "npm run lint:src && npm run lint:types && npm run lint:exports",
     "lint:exports": "attw --pack .",
     "lint:src": "eslint .",
     "lint:types": "tsc",
     "prepublishOnly": "npm run build && npm run lint",
+    "postpublish": "git push --follow-tags",
     "test": "vitest ./src"
   },
   "dependencies": {
