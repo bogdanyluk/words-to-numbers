@@ -1,5 +1,6 @@
 import { NUMBER } from "./constants";
-import { TokenType, type Region, type SubRegion } from "./types";
+import type { Region, SubRegion } from "./types";
+import { TokenType } from "./types";
 import { checkBlacklist, splice } from "./util";
 
 const getNumber = (region: Region): number => {
