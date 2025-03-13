@@ -1,6 +1,6 @@
 {
   "name": "@insomnia-dev/words-to-numbers",
-  "version": "2.1.3",
+  "version": "2.2.0",
   "description": "Convert textual words to numbers with optional fuzzy text matching",
   "license": "MIT",
   "author": "Chris Sandvik <chris.sandvik@gmail.com>",
