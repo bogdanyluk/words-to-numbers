@@ -3,7 +3,7 @@ export interface WordsToNumbersOptions {
   impliedHundreds?: boolean;
 }
 
-export const enum TokenType {
+export enum TokenType {
   UNIT = 0,
   TEN = 1,
   MAGNITUDE = 2,
